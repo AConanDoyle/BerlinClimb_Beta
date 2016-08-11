@@ -4,37 +4,39 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.UiSettings;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.turf.TurfConstants;
+import com.mapbox.services.commons.turf.TurfException;
+import com.mapbox.services.commons.turf.TurfMeasurement;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -49,92 +51,61 @@ import de.example.navdrawemap_2.maptest.OverActivity;
 import de.example.navdrawemap_2.maptest.R;
 import de.example.navdrawemap_2.maptest.XMLParser;
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnInfoWindowClickListener {
 
     // Map stuff
     private static final int MY_PERMISSIONS_REQUEST_GET_LOCATION = 1;
-    private LatLng myposition;
-    private Location myLocation;
-    private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
+    protected LocationManager locationManager;
+    protected LatLng myposition;
+    protected Location myLocation;
+    private MapView mapView;
+    private MapboxMap mapboxMap;
+    private MapsActivity context;
 
     // Data
     private String gml = null;
 
-    // Notes for DOM
+    // Notes for DOM / Data
     String KEY_FM = "gml:featureMember"; // entering Tag for XML-File
     String KEY_NAME = "ogr:NAME";
     String KEY_LAT = "ogr:LAT";
     String KEY_LONG = "ogr:LONG";
     String KEY_USE = "ogr:NUTZEN";
-    String KEY_AREA = "ogr:BEZIRK";
-    String KEY_INFO = "ogr:INFO";
     String KEY_KROUT = "ogr:KROUTEN";
     String KEY_BROUT = "ogr:BROUTEN";
     String KEY_INOUT = "ogr:INOUT";
 
-    // Floating Action Buttons Menu
+    // Floating Action Buttons & Menu
     FloatingActionMenu materialDesignFAM;
-    FloatingActionButton fabBoulder, fabClimb, fabBoulderandClimb;
+    FloatingActionButton fabBoulder, fabClimb, fabBoulderandClimb, locationButton;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        // Check if we were successful in obtaining the map.
+        mapView = (MapView) findViewById(R.id.mapviewmapbox);
 
         // FA Buttons
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
-        materialDesignFAM.setAnimated(true);
-        materialDesignFAM.setMenuButtonLabelText("Filter");
-
         fabClimb = (FloatingActionButton) findViewById(R.id.floating_action_menu_climb);
         fabBoulder = (FloatingActionButton) findViewById(R.id.floating_action_menu_boulder);
         fabBoulderandClimb = (FloatingActionButton) findViewById(R.id.floating_action_menu_BandC);
+        locationButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
 
-        fabClimb.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View CoordiLayout) {
-                mMap.clear();
-                setMarkers(gml, true, false, false);
-                // Message for the user
-                Snackbar snackbar = Snackbar
-                        .make(CoordiLayout, "reine Kletterspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-        fabBoulder.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMap.clear();
-                setMarkers(gml, false, true, false);
-                Snackbar snackbar = Snackbar
-                        .make(v, "reine Boulderspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-        fabBoulderandClimb.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mMap.clear();
-                setMarkers(gml, true, true, true);
-                Snackbar snackbar = Snackbar
-                        .make(v, "Boulder- und Kletterspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
+        mapView.onCreate(savedInstanceState);
+        context = this;
+        onMapReady(mapboxMap);
     }
 
-    // optionmenu methods
+    //setup the optionmenu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    // method for the options menu; s and calls for other activities
+    // method for the options menu and calls for other activities
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -155,105 +126,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // setting up the map
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        UiSettings mUiSettings;
-
-        // sets the maptyp, in these case Terrain
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
-        // Adapter an Listener for custom InfoWindows for the markers
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
-        mMap.setOnInfoWindowClickListener(this);
-
-        // Move to Berlin and some Mapsettings
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(52.52001, 13.40495)));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(9));
-        mMap.setOnMapLoadedCallback(this);
-        mMap.setMyLocationEnabled(true);
-        mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMapToolbarEnabled(false);
-        mUiSettings.setAllGesturesEnabled(true);
-
-      /*  // MapBox Tiles, realized with a TileOverlay
-        final MapBoxOnlineTileProvider provider = new MapBoxOnlineTileProvider("mapbox.streets", true);
-        final TileOverlayOptions overlay = new TileOverlayOptions().tileProvider(provider);
-        mMap.addTileOverlay(overlay);  */
-
-        // codebloc for location runtime permissions. It does some If-checks and asks the user for permission
-        // or not.
-
-        int hasFineLocationPermission = 0;
-        int hasCoarseLocationPermission = 0;
-        List<String> permissions = new ArrayList<String>();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hasFineLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-            hasCoarseLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
-        if (!permissions.isEmpty()) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_GET_LOCATION);
-            //  requestPermissions(permissions.toArray(new String[permissions.size()]), MY_PERMISSIONS_REQUEST_GET_LOCATION);
-        }
-
-        // two If-Checks for Runtime Permissions/ in these case fine and coarse location
-        if (hasFineLocationPermission != 0) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_GET_LOCATION);
-        }
-        if (hasCoarseLocationPermission != 0) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_GET_LOCATION);
-        }
-
-        // Locationmanager which combines the GPS and the Network (WIFI and PhoneNetwork) providers
-        // plus one listener which is import for the regular updates
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        // default location
-        myposition = new LatLng(52.52001, 13.40495);
-
-        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-            locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 1000,
-                    0, locationListener);
-            myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (myLocation != null) {
-                myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            }
-        }
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (myLocation != null) {
-                myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            }
-        }
-
-        // loading data and sets the markers
-        String filename = "spotsberlin3";
-        try {
-            XMLParser parser = new XMLParser();
-            gml = parser.loadFile(filename, getResources(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Calls the method that places all markers on the map
-        setMarkers(gml, true, true, true);
-    }
-
-    public void onMapLoaded() {
-        CameraUpdate center = CameraUpdateFactory.newLatLng(myposition);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
-        mMap.moveCamera(center);
-        mMap.animateCamera(zoom, 2000, null);
     }
 
     private LocationListener locationListener = new LocationListener() {
@@ -285,17 +157,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_GET_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (myLocation !=null) {
+                 /*   if (myLocation !=null) {
                         myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     }
                 } else {
-                    myposition = new LatLng(52.52001, 13.40495);
+                    myposition = new LatLng(52.52001, 13.40495); */
                 }
             }
             break;
@@ -309,20 +181,178 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         }
     }
 
+    public void onMapReady(MapboxMap mapboxMap) {
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(final MapboxMap mapboxMap) {
+
+                int hasFineLocationPermission = 0;
+                int hasCoarseLocationPermission = 0;
+                List<String> permissions = new ArrayList<String>();
+
+                // If the Androidversion is higher than M, the code checks for the runtime-permissions
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    hasFineLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+                    hasCoarseLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+                }
+                if (!permissions.isEmpty()) {
+                    ActivityCompat.requestPermissions(context,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_GET_LOCATION);
+                }
+
+                // two If-Checks for Runtime Permissions/ in these case fine and coarse location
+                if (hasFineLocationPermission != 0) {
+                    ActivityCompat.requestPermissions(context,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_GET_LOCATION);
+                }
+
+                if (hasCoarseLocationPermission != 0) {
+                    ActivityCompat.requestPermissions(context,
+                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_GET_LOCATION);
+                }
+
+                // Locationmanager which combines the GPS and the Network (WIFI and MobilePhoneNetwork) providers
+                // plus one listener which is import for the regular updates
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                if (locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER)
+                        && hasCoarseLocationPermission == 0) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 10, locationListener);
+                }
+                if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)
+                        && hasFineLocationPermission == 0) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, locationListener);
+                }
+
+                // default location
+                myposition = new LatLng(52.52001, 13.40495);
+
+                // requesting location for android smaller than marshmallow (API23)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,
+                            0, locationListener);
+                    if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                        myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    }
+                }
+
+                if (hasCoarseLocationPermission == 0) {
+                    if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,
+                                0, locationListener);
+                        myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (myLocation != null) {
+                            myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                        }
+                    }
+                }
+
+                if (hasFineLocationPermission == 0) {
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (myLocation != null) {
+                            myposition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                        }
+                    }
+                }
+
+                // move to users location if location is known, otherwise to city center
+                CameraPosition position = new CameraPosition.Builder()
+                        .target(myposition)
+                        .zoom(11)
+                        .build();
+                mapboxMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(position), 6000);
+
+                // some UserInterface settings
+                UiSettings mUiSettings = mapboxMap.getUiSettings();
+                mUiSettings.setAttributionEnabled(false);
+                mUiSettings.setAllGesturesEnabled(true);
+
+                mapboxMap.setOnInfoWindowClickListener(context);
+                mapboxMap.setMyLocationEnabled(true);
+
+                // loading data and sets the markers
+                String filename = "spotsberlin4";
+                try {
+                    XMLParser parser = new XMLParser();
+                    gml = parser.loadFile(filename, getResources(), true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // method that places all markers on the map
+                setMarkers(mapboxMap, gml, true, true);
+
+                fabClimb.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        mapboxMap.removeAnnotations();
+                        setMarkers(mapboxMap, gml, true, false);
+                        // Message for the user
+                        Snackbar snackbar = Snackbar
+                                .make(v, "Kletterspots", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                });
+
+                fabBoulder.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        mapboxMap.removeAnnotations();
+                        setMarkers(mapboxMap, gml, false, true);
+                        Snackbar snackbar = Snackbar
+                                .make(v, "Boulderspots", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                });
+
+                fabBoulderandClimb.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        mapboxMap.removeAnnotations();
+                        setMarkers(mapboxMap, gml, true, true);
+                        Snackbar snackbar = Snackbar
+                                .make(v, "Boulder- und Kletterspots", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                });
+
+                // button for settting Camera to userlocation
+                locationButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (myposition != null) {
+                            CameraPosition position = new CameraPosition.Builder()
+                                    .target(myposition)
+                                    .zoom(13)
+                                    .build();
+                            mapboxMap.animateCamera(CameraUpdateFactory
+                                    .newCameraPosition(position), 3000);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     // method for setting the markers on the map; requires the filter variables boulder ...
-    public void setMarkers(String gml, Boolean climb, Boolean boulder, Boolean boulderandclimb) {
+    public void setMarkers(MapboxMap mapboxMap, String gml, final Boolean climb, Boolean boulder) {
 
         XMLParser parser = new XMLParser();
         Document doc = parser.getDomElement(gml);
         NodeList nl = doc.getElementsByTagName(KEY_FM);
 
-        // Set Markers on map
+        // set markers on map
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            double LAT = Double.parseDouble(parser.getValue(e, KEY_LAT));
-            double LONG = Double.parseDouble(parser.getValue(e, KEY_LONG));
-            String name = parser.getValue(e, KEY_NAME);
-            String use = parser.getValue(e, KEY_USE);
+            final double LAT = Double.parseDouble(parser.getValue(e, KEY_LAT));
+            final double LONG = Double.parseDouble(parser.getValue(e, KEY_LONG));
+            final String name = parser.getValue(e, KEY_NAME);
+            final String use = parser.getValue(e, KEY_USE);
             String kRouten = parser.getValue(e, KEY_KROUT);
             String bRouten = parser.getValue(e, KEY_BROUT);
             String inout = parser.getValue(e, KEY_INOUT);
@@ -339,171 +369,131 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         .icon(pointIcon).snippet("\n" + "Kletterrouten: " + kRouten +
                                 "\nBoulderrouten: " + bRouten + "\nInfo: " + info));
 
-                // adds item to Clustermanager class
-                MyItem item = new MyItem(LAT, LONG, name, pointIcon);
-                mClusterManager.addItem(item);
             } */
 
             if (climb && use.equals("Klettern")) {
-                // Icon Colour
-                BitmapDescriptor pointIcon = BitmapDescriptorFactory
-                        .defaultMarker(setMarkerColor(inout));
 
-                mMap.addMarker(new MarkerOptions()
+                mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(LAT, LONG))
                         .title(name)
-                        .flat(true)
-                        .anchor(0, 1)
-                        .icon(pointIcon).snippet("\n" + "Kletterrouten: " + kRouten +
-                                "\nKletter oder Bouldern: " + use + "\nBoulderrouten: "
+                        .icon(setIconColour(use))
+                        .snippet("\nKletter oder Boulderspot: " + use +
+                                "\nKletterrouten: " + kRouten + "\nBoulderrouten: "
                                 + bRouten + "\nIn- oder Outdoor: " + inout));
             }
 
-            if (boulder && use.equals("Bouldern")) {
-                BitmapDescriptor pointIcon = BitmapDescriptorFactory
-                        .defaultMarker(setMarkerColor(inout));
 
-                mMap.addMarker(new MarkerOptions()
+            if (boulder && use.equals("Bouldern")) {
+
+                mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(LAT, LONG))
                         .title(name)
-                        .flat(true)
-                        .anchor(0, 1)
-                        .icon(pointIcon).snippet("\n" + "Kletterrouten: " + kRouten +
-                                "\nKletter oder Bouldern: " + use + "\nBoulderrouten: "
+                        .icon(setIconColour(use))
+                        .snippet("\nKletter oder Boulderspot: " + use +
+                                "\nKletterrouten: " + kRouten + "\nBoulderrouten: "
                                 + bRouten + "\nIn- oder Outdoor: " + inout));
             }
 
             if (climb && use.equals("Klettern & Bouldern") &&
                     boulder && use.equals("Klettern & Bouldern")) {
-                BitmapDescriptor pointIcon = BitmapDescriptorFactory
-                        .defaultMarker(setMarkerColor(inout));
 
-                mMap.addMarker(new MarkerOptions()
+                mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(LAT, LONG))
                         .title(name)
-                        .flat(true)
-                        .anchor(0, 1)
-                        .icon(pointIcon).snippet("\n" + "Kletterrouten: " + kRouten +
-                                "\nKletter oder Bouldern: " + use + "\nBoulderrouten: "
+                        .icon(setIconColour(use))
+                        .snippet("\nKletter oder Boulderspot: " + use +
+                                "\nKletterrouten: " + kRouten + "\nBoulderrouten: "
                                 + bRouten + "\nIn- oder Outdoor: " + inout));
-            }
-            /*
-            if (boulder && use.equals("Klettern&Bouldern")) {
-                // Icon Colour
-                BitmapDescriptor pointIcon = BitmapDescriptorFactory
-                        .defaultMarker(setMarkerColor(inout));
-
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(LAT, LONG))
-                        .title(name)
-                        .flat(true)
-                        .anchor(0, 1)
-                        .icon(pointIcon).snippet("\n" + "Kletterrouten: " + kRouten +
-                                "\nBoulderrouten: " + bRouten + "\nInfo: " + info));
-            }*/
-
-        }
-
-    }
-
-    // Setting the Icons/Color for the markers
-    public float setMarkerColor(String inout) {
-
-        switch (inout) {
-            case "outdoor":
-                return BitmapDescriptorFactory.HUE_GREEN;
-            case "indoor":
-                return BitmapDescriptorFactory.HUE_RED;
-            default:
-                return BitmapDescriptorFactory.HUE_BLUE;
-        }
-    }
-
-    class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
-
-        // These a both viewgroups containing an ImageView with id "badge" and two TextViews with id
-        // "title" and "snippet".
-        private final View mWindow;
-        private final View mContents;
-
-        CustomInfoWindowAdapter() {
-            mWindow = getLayoutInflater().inflate(R.layout.custom_infowindow_map, null);
-            mContents = getLayoutInflater().inflate(R.layout.custom_infowindow_content_map, null);
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            render(marker, mWindow);
-            return mWindow;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            render(marker, mContents);
-            return mContents;
-        }
-
-        private void render(Marker marker, View view) {
-            int badge = 0;
-            ((ImageView) view.findViewById(R.id.badge)).setImageResource(badge);
-
-            String title = marker.getTitle();
-            TextView titleUi = ((TextView) view.findViewById(R.id.title));
-            if (title != null) {
-                // Spannable string allows us to edit the formatting of the text.
-                SpannableString titleText = new SpannableString(title);
-                titleText.setSpan(new ForegroundColorSpan(Color.BLACK), 0, titleText.length(), 0);
-                titleUi.setText(titleText);
-            } else {
-                titleUi.setText("n.v.");
-            }
-
-            String snippet = marker.getSnippet();
-            TextView snippetUi = ((TextView) view.findViewById(R.id.snippet));
-            //TextView snippetUi2 = ((TextView) view.findViewById(R.id.snippet2));
-            if (snippet != null && snippet.length() > 12) {
-                SpannableString snippetText = new SpannableString(snippet);
-                snippetUi.setText(snippetText);
-            } else {
-                snippetUi.setText("n.v.");
             }
         }
     }
 
     // method for infowindowbubble in map when is clicked;
-    public void onInfoWindowClick(Marker marker) {
+    public boolean onInfoWindowClick(@NonNull com.mapbox.mapboxsdk.annotations.Marker marker) {
+
+        LatLng position = marker.getPosition();
+    //    distance(position);
+        Double LongC = position.getLongitude();
+        Double Lat = position.getLatitude();
+
         Intent intentinfoWindow = new Intent(this, InfoWindowActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("title", marker.getTitle());
         bundle.putString("snippet", marker.getSnippet());
+        bundle.putDouble("longitude", LongC);
+        bundle.putDouble("latitude", Lat);
         intentinfoWindow.putExtras(bundle);
         startActivity(intentinfoWindow);
+
+        return false;
+    }
+
+    public Icon setIconColour (String type) {
+
+        IconFactory iconFactory = IconFactory.getInstance(MapsActivity.this);
+        Drawable iconDrawableDeppRed = ContextCompat.getDrawable(MapsActivity.this, R.drawable.marker_deep_red_36px);
+        Drawable iconDrawableRed = ContextCompat.getDrawable(MapsActivity.this, R.drawable.marker_red_36px);
+        Drawable iconDrawableOrange = ContextCompat.getDrawable(MapsActivity.this, R.drawable.marker_orange_36px);
+        Icon icon;
+
+        switch (type) {
+            case "Klettern & Bouldern":
+                return icon = iconFactory.fromDrawable(iconDrawableDeppRed);
+            case "Klettern":
+                return icon = iconFactory.fromDrawable(iconDrawableRed);
+            case "Bouldern":
+                return icon = iconFactory.fromDrawable(iconDrawableOrange);
+            default:
+                return icon = iconFactory.fromDrawable(iconDrawableDeppRed);
+        }
+    }
+
+    // first draw
+    // calculating distance between user-location and selected marker
+    public void distance(LatLng markerPosition) {
+
+        Position myposition_local = null;
+        Position marker = null;
+        // problem: getting lat long from parameters
+        marker.fromCoordinates(markerPosition.getLongitude(),markerPosition.getLatitude());
+        myposition_local.fromCoordinates(myposition.getLatitude(), myposition.getLatitude());
+
+        double distance = 0;
+
+        try {
+            distance = TurfMeasurement.distance(Point.fromCoordinates(myposition_local), Point.fromCoordinates(marker),
+                    TurfConstants.UNIT_KILOMETERS);
+        } catch (TurfException e) {
+            e.printStackTrace();
+        }
+        Snackbar.make(findViewById(android.R.id.content), "Entfernung = " + distance + " Kilometer",
+                Snackbar.LENGTH_INDEFINITE).show();
     }
 
     // lifecycle methods
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapFragment.onSaveInstanceState(outState);
-
+        mapView.onSaveInstanceState(outState);
     }
 
     public void onPause() {
         super.onPause();
-        mapFragment.onPause();
+        mapView.onPause();
         Log.d("lifecycle", "onPause invoked");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapFragment.onResume();
-    }
+        mapView.onResume();
+
+        }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapFragment.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override

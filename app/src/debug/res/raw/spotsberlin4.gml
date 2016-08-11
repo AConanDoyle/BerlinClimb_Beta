@@ -270,36 +270,6 @@
     </ogr:spotsberlin3>
   </gml:featureMember>
   <gml:featureMember>
-    <ogr:spotsberlin3 fid="spotsberlin3.9">
-      <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.271377086639401,52.474690560437899</gml:coordinates></gml:Point></ogr:geometryProperty>
-      <ogr:ID>181</ogr:ID>
-      <ogr:LAT>52.474690560437899</ogr:LAT>
-      <ogr:LONG>13.271377086639401</ogr:LONG>
-      <ogr:NAME>Seilgarten im Grunewald</ogr:NAME>
-      <ogr:STRASSE>Eichhörnchensteig</ogr:STRASSE>
-      <ogr:HAUSNR>3</ogr:HAUSNR>
-      <ogr:PLZ>14193</ogr:PLZ>
-      <ogr:BEZIRK>Charlottenburg-Wilmersdorf</ogr:BEZIRK>
-      <ogr:ZUGANG>in der Nähe des Abentteuerzentrum im Grunewald</ogr:ZUGANG>
-      <ogr:ANREISE>ÖPNV -Haltestelle Roseneck,</ogr:ANREISE>
-      <ogr:EIGNER>Fahrten-Ferne-Abenteuer</ogr:EIGNER>
-      <ogr:TELNR>030 826 13 17</ogr:TELNR>
-      <ogr:EMAIL>seilgarten@fahrten-ferne-abenteuer.de</ogr:EMAIL>
-      <ogr:PREIS>auf Anfrage</ogr:PREIS>
-      <ogr:INOUT>outdoor</ogr:INOUT>
-      <ogr:NUTZEN>Hochseilgarten</ogr:NUTZEN>
-      <ogr:MATERIAL>Holz</ogr:MATERIAL>
-      <ogr:GRAD>01-02</ogr:GRAD>
-      <ogr:grade_von>0</ogr:grade_von>
-      <ogr:grade_bis>2.000000000000000</ogr:grade_bis>
-      <ogr:HOEHE>5.000000000000000</ogr:HOEHE>
-      <ogr:KROUTEN>15</ogr:KROUTEN>
-      <ogr:BROUTEN>0</ogr:BROUTEN>
-      <ogr:INFO>Seilgarten Grunewald</ogr:INFO>
-      <ogr:BEARBEITER>anja</ogr:BEARBEITER>
-    </ogr:spotsberlin3>
-  </gml:featureMember>
-  <gml:featureMember>
     <ogr:spotsberlin3 fid="spotsberlin3.10">
       <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.581601381301899,52.563943971446598</gml:coordinates></gml:Point></ogr:geometryProperty>
       <ogr:ID>7</ogr:ID>
@@ -500,35 +470,6 @@
       <ogr:INFO>Die Normalwege (=Abstiege) sind nicht schwer zu bewältigen. Über die bewußte Red</ogr:INFO>
       <ogr:BEARBEITER>philipp</ogr:BEARBEITER>
       <ogr:IMAID>b_boese_gute_h</ogr:IMAID>
-    </ogr:spotsberlin3>
-  </gml:featureMember>
-  <gml:featureMember>
-    <ogr:spotsberlin3 fid="spotsberlin3.17">
-      <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.3836795,52.5337257</gml:coordinates></gml:Point></ogr:geometryProperty>
-      <ogr:ID>192</ogr:ID>
-      <ogr:LAT>52.533725699999998</ogr:LAT>
-      <ogr:LONG>13.383679500000000</ogr:LONG>
-      <ogr:NAME>MountMitte</ogr:NAME>
-      <ogr:STRASSE>Caroline-Michaelis-Straße</ogr:STRASSE>
-      <ogr:HAUSNR>8</ogr:HAUSNR>
-      <ogr:PLZ>10115</ogr:PLZ>
-      <ogr:BEZIRK>Mitte</ogr:BEZIRK>
-      <ogr:ZUGANG>S-Bahn Nordbahnhof</ogr:ZUGANG>
-      <ogr:EIGNER>BeachMitte GmbH</ogr:EIGNER>
-      <ogr:EMAIL>info@mountmitte.de</ogr:EMAIL>
-      <ogr:PREIS>19,00</ogr:PREIS>
-      <ogr:INOUT>outdoor</ogr:INOUT>
-      <ogr:NUTZEN>Hochseilgarten</ogr:NUTZEN>
-      <ogr:MATERIAL>Metall</ogr:MATERIAL>
-      <ogr:GRAD>02-04</ogr:GRAD>
-      <ogr:grade_von>2</ogr:grade_von>
-      <ogr:grade_bis>4.000000000000000</ogr:grade_bis>
-      <ogr:HOEHE>15.000000000000000</ogr:HOEHE>
-      <ogr:KROUTEN>6 Routen</ogr:KROUTEN>
-      <ogr:INFO>Hochseilgarten - gut als Training</ogr:INFO>
-      <ogr:HOMEPAGE>mountmitte.de</ogr:HOMEPAGE>
-      <ogr:BEARBEITER>philipp</ogr:BEARBEITER>
-      <ogr:IMAID>mount_mitte_h</ogr:IMAID>
     </ogr:spotsberlin3>
   </gml:featureMember>
   <gml:featureMember>
@@ -1187,29 +1128,6 @@
       <ogr:HOMEPAGE>dav-berlin.de</ogr:HOMEPAGE>
       <ogr:BEARBEITER>karsten</ogr:BEARBEITER>
       <ogr:Quelle>http://www.dav-berlin.de/?bse=kletteranlagen_huettenweg&amp;bmo=0&amp;bex=0&amp;btl=DAV_HOME</ogr:Quelle>
-    </ogr:spotsberlin3>
-  </gml:featureMember>
-  <gml:featureMember>
-    <ogr:spotsberlin3 fid="spotsberlin3.40">
-      <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.29075,52.542355</gml:coordinates></gml:Point></ogr:geometryProperty>
-      <ogr:ID>0</ogr:ID>
-      <ogr:LAT>52.542355000000001</ogr:LAT>
-      <ogr:LONG>13.290749999999999</ogr:LONG>
-      <ogr:NAME>Waldhochseilgarten Jungfernheide</ogr:NAME>
-      <ogr:STRASSE>Heckerdamm</ogr:STRASSE>
-      <ogr:HAUSNR>260</ogr:HAUSNR>
-      <ogr:PLZ>13627</ogr:PLZ>
-      <ogr:BEZIRK>Charlottenburg-Wilmersdorf</ogr:BEZIRK>
-      <ogr:PREIS>19 bis 20</ogr:PREIS>
-      <ogr:INOUT>outdoor</ogr:INOUT>
-      <ogr:NUTZEN>Hochseilgarten</ogr:NUTZEN>
-      <ogr:MATERIAL>Holz</ogr:MATERIAL>
-      <ogr:GRAD>02-04</ogr:GRAD>
-      <ogr:grade_von>0</ogr:grade_von>
-      <ogr:grade_bis>0.000000000000000</ogr:grade_bis>
-      <ogr:HOEHE>17.000000000000000</ogr:HOEHE>
-      <ogr:HOMEPAGE>waldhochseilgarten-jungfernheide.de</ogr:HOMEPAGE>
-      <ogr:IMAID>hsg_jungfernheide_h</ogr:IMAID>
     </ogr:spotsberlin3>
   </gml:featureMember>
   <gml:featureMember>

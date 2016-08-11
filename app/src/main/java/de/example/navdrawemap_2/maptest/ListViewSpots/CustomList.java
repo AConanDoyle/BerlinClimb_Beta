@@ -64,7 +64,7 @@ public class CustomList extends ArrayAdapter<String> {
             if (imageid[position] != 0) {
                 imageView.setImageResource(imageid[position]);
             } else {
-                imageView.setImageResource(R.drawable.ic_map_24dp);
+                imageView.setImageResource(R.mipmap.ic_launcher);
             }
             // set the values in the text
             textViewName.setText(heads[position]);

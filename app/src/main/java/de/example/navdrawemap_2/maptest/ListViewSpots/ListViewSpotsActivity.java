@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,16 +13,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 
 import de.example.navdrawemap_2.maptest.Maps.Maps_singlespot_Activity;
 import de.example.navdrawemap_2.maptest.R;
@@ -58,9 +56,6 @@ public class ListViewSpotsActivity extends AppCompatActivity {
     private CustomList customList;
     private ListView listView;
 
-    // Floating Action Buttons Menu
-    FloatingActionMenu FAM;
-    FloatingActionButton fabBoulder, fabClimb, fabBoulderandClimb, fabAll;
 
     Resources resources;
 
@@ -69,49 +64,8 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overwiev);
         resources = getResources();
-        FAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
 
-        fabClimb = (FloatingActionButton) findViewById(R.id.floating_action_menu_climb);
-        fabBoulder = (FloatingActionButton) findViewById(R.id.floating_action_menu_boulder);
-        fabBoulderandClimb = (FloatingActionButton) findViewById(R.id.floating_action_menu_BandC);
-        fabAll = (FloatingActionButton) findViewById(R.id.floating_action_menu_all);
-
-        fabClimb.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                handleSpots(true, false, false, false);
-                // Message for the user
-                Snackbar snackbar = Snackbar
-                        .make(v, "Kletterspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-
-        fabBoulder.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                handleSpots(false, true, false, false);
-                Snackbar snackbar = Snackbar
-                        .make(v, "Boulderspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-        fabBoulderandClimb.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                handleSpots(false, false, true, false);
-                Snackbar snackbar = Snackbar
-                        .make(v, "Boulder und Kletterspots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-        fabAll.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                handleSpots(true, true, true, false);
-                Snackbar snackbar = Snackbar
-                        .make(v, "Alle Spots", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
-
-        handleSpots(true, true, true, false);
+        handleSpots(true, true, true);
     }
 /*
     @Override
@@ -129,7 +83,7 @@ public class ListViewSpotsActivity extends AppCompatActivity {
                 finish();
                 return true;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -138,13 +92,13 @@ public class ListViewSpotsActivity extends AppCompatActivity {
 
 
     public void handleSpots(boolean filterclimb, boolean filterboulder,
-                            boolean filterboulderandclimb, boolean filterhigh_wire) {
+                            boolean filterboulderandclimb) {
 
         // file input from raw folder
         String gml = null;
         try {
             XMLParser parser = new XMLParser();
-            String filename = "spotsberlin3";
+            String filename = "spotsberlin4";
             gml = parser.loadFile(filename, resources, true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -168,14 +122,10 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         longC = new double[nl.getLength()];
         webadress = new String[nl.getLength()];
 
-
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
 
-            // filter checks for all tree filter variabels
-            // the high wire data is always skipe put holded in the data
-            if (!filterhigh_wire && parser.getValue(e, KEY_TYPE).equals("Hochseilgarten"))
-                continue;
+            // filter checks for all tree filter variabels;
             if (!filterclimb && parser.getValue(e, KEY_TYPE).equals("Klettern"))
                 continue;
             if (!filterboulder && parser.getValue(e, KEY_TYPE).equals("Bouldern"))
@@ -234,6 +184,7 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         customList = new CustomList(this, head, imageid, type, inout, krouten, brouten,
                 material, price, adress, lat, longC, webadress);
         listView = (ListView) findViewById(R.id.listView);
+       // cardview = (CardView) findViewById(R.id.card_view);
         listView.setAdapter(customList);
 
         // Click handle if a list item will be clicked
@@ -249,26 +200,48 @@ public class ListViewSpotsActivity extends AppCompatActivity {
                 TextView textViewheads = (TextView) selectedItem.findViewById(R.id.textViewHeads);
                 String tvheads = textViewheads.getText().toString();
 
+                TextView textkrouten = (TextView) selectedItem.findViewById(R.id.textViewKRouten);
+                String tvkrouten = textkrouten.getText().toString();
+
+                TextView textbrouten = (TextView) selectedItem.findViewById(R.id.textViewBRouten);
+                String tvbrouten= textbrouten.getText().toString();
+
                 TextView texttype = (TextView) selectedItem.findViewById(R.id.textViewType);
                 String tvtype = texttype.getText().toString();
 
                 TextView textViewinout = (TextView) selectedItem.findViewById(R.id.textViewInOUT);
                 String tvinout = textViewinout.getText().toString();
 
-                TextView textViewlat = (TextView) selectedItem.findViewById(R.id.textViewLat);
-                String tvlat = textViewlat.getText().toString();
+                // Change decimal seperator
+                NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
+                TextView textViewlat = (TextView) selectedItem.findViewById(R.id.textViewLat);
                 TextView textViewlong = (TextView) selectedItem.findViewById(R.id.textViewLong);
-                String tvlong = textViewlong.getText().toString();
+
+                Number numberlat = null;
+                Number numberlong = null;
+
+                try {
+                    numberlat = format.parse(textViewlat.getText().toString());
+                    numberlong = format.parse(textViewlong.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Double tvlat = numberlat.doubleValue();
+                Double tvlong = numberlong.doubleValue();
+
+                // String tvlong = textViewlong.getText().toString();
 
                 Intent intentMaps2Activitiy = new Intent(getApplicationContext(),
                         Maps_singlespot_Activity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("heads", tvheads);
-                bundle.putString("type", tvtype);
+                bundle.putString("krouten", tvkrouten);
+                bundle.putString("brouten", tvkrouten);
+                bundle.putString("use", tvtype);
                 bundle.putString("inout", tvinout);
-                bundle.putString("lat", tvlat);
-                bundle.putString("long", tvlong);
+                bundle.putDouble("lat", tvlat);
+                bundle.putDouble("long", tvlong);
                 intentMaps2Activitiy.putExtras(bundle);
                 startActivity(intentMaps2Activitiy);
 
@@ -285,7 +258,6 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         }
         return arrayOutput;
     }
-
 
     public void callWebAdress(View v) {
 

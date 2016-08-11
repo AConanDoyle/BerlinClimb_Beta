@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Überhang</string>
+    <string name="app_name">Send up</string>
     <string name="title_activity_maps">Spots entdecken</string>
     <string name="title_activity_main">Spots entdecken</string>
     <string name="action_settings">Einstellungen</string>
@@ -16,7 +16,7 @@ Anonymous
 <br/>
 Kontakt:<br/>
 E-Mail:
-anonymous@t-online.de.de<br/>
+mapapps@posteo.de<br/>
 <br/>
 <br/>
 <b>Haftung f&uuml;r Inhalte</b><br/>
@@ -70,7 +70,10 @@ f&uuml;r jedwede Angaben &uuml;bernommen werden kann.<br/>
     <string name="logos">Logos</string>
     <string name="sort_a_z">Name A-z</string>
     <string name="sort_">Platzhalter!</string>
+    <string name="routing">Route</string>
     <string name="title_activity_maps12">Map</string>
-    <string name="accessToken">pk.eyJ1IjoiYW5kcm9pZHBpdGkiLCJhIjoiY2lrNTg1ZmI5MDA3bHY0a3RtNTc0bHh6NiJ9.xc2grqNxvX1ALecnKwZ8Fw</string>
+    <string name="accessToken">sk.eyJ1IjoiYW5kcm9pZHBpdGkiLCJhIjoiY2lxeHZuejV2MDA0cWk0bmp3azV5NzhleCJ9.dfzuFWtXNvaYdJC88gh1cw</string>
+    <string name="bikeroute">Fahradroute</string>
+    <string name="walkroute">zu Fuß</string>
 
 </resources>

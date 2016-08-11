@@ -7,7 +7,7 @@
         <item
             android:id="@+id/item_overview"
             android:orderInCategory="100"
-            android:title="Überblick" />
+            android:title="Listenansicht" />
         <item
             android:id="@+id/item_over"
             android:orderInCategory="100"

@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- more permissions for MapBox -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -20,14 +20,6 @@
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -46,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ListViewSpots.ListViewSpotsActivity"
             android:label="@string/title_activity_overwiev"
@@ -67,11 +60,12 @@
             android:label="@string/title_activity_maps"
             android:parentActivityName=".ListViewSpots.ListViewSpotsActivity"
             android:theme="@style/AppTheme" />
+
         <activity
-            android:name=".Maps.MapMapboxActivity"
-            android:label="@string/title_activity_maps"
-            android:parentActivityName=".ListViewSpots.ListViewSpotsActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".Maps.Routing_Activity"
+            android:label="@string/routing"
+            android:parentActivityName="de.example.navdrawemap_2.maptest.Maps.InfoWindowActivity"
+            android:theme="@style/AppTheme"/>
 
     </application>
 

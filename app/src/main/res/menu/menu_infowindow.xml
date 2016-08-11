@@ -7,14 +7,6 @@
         <item
             android:id="@+id/item_overview"
             android:orderInCategory="100"
-            android:title="Überblick" />
-        <item
-            android:id="@+id/item_over"
-            android:orderInCategory="100"
-            android:title="Über" />
-        <item
-            android:id="@+id/item_close"
-            android:orderInCategory="100"
-            android:title="App beenden" />
+            android:title="Listenansicht" />
     </group>
 </menu>

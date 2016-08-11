@@ -12,7 +12,7 @@ import de.example.navdrawemap_2.maptest.Maps.MapsActivity;
 
 public class SplashscreenActivity extends Activity {
 
-    private final int SPLASH_DISPLAY_LENGHT = 700; // time howe long splashscreen is visible
+    private final int SPLASH_DISPLAY_LENGHT = 700; // time howe long SplashScreen is visible
     View view;
 
     @Override
@@ -20,7 +20,7 @@ public class SplashscreenActivity extends Activity {
         super.onCreate(icicle);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         view = new View (this);
-        setContentView(R.layout.activity_startscreen);
+        setContentView(R.layout.activity_splashscreen);
 
         new Handler().postDelayed(new Runnable() {
             @Override
