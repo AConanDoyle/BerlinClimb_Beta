@@ -1,6 +1,6 @@
 # BerlinClimb_Beta
 
-An apss that shows boulder and climbingspots in Berlin. 
+An apps that shows boulder and climbingspots in Berlin. 
 
 This project is still in developement phase. So please feel free to comment and criticize the code. You can contact me at mapapps@posteo.de
 
