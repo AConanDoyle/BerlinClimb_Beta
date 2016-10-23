@@ -18,10 +18,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
-
 import de.example.navdrawemap_2.maptest.R;
 
 public class Maps_singlespot_Activity extends AppCompatActivity implements OnMapReadyCallback {
@@ -56,31 +52,29 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
 
     public void onMapReady(MapboxMap mapboxMap) {
 
-        final Intent intentbundleStrings = getIntent();
+        final Intent intentbundleData = getIntent();
+        final Bundle extraBundle = intentbundleData.getExtras();
 
-        if (intentbundleStrings != null) {
+        if (intentbundleData != null) {
             mapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(final MapboxMap mapboxMap) {
-                    NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
 
                     Number lat = null;
                     Number longC = null;
-
-                    try {
-                        lat = format.parse(intentbundleStrings.getStringExtra("lat"));
-                        longC = format.parse(intentbundleStrings.getStringExtra("long"));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    if (!extraBundle.isEmpty()) {
+                        // Coordinates for the destination
+                        longC = extraBundle.getDouble("long");
+                        lat = extraBundle.getDouble("lat");
                     }
 
                     mapboxMap.addMarker(new MarkerOptions()
-                            .title(intentbundleStrings.getStringExtra("heads"))
-                            .icon(setIconColour(intentbundleStrings.getStringExtra("use")))
-                            .snippet("Kletter oder Boulderspot: " + intentbundleStrings.getStringExtra("use") +
-                                    "\n" + intentbundleStrings.getStringExtra("krouten") +
-                                    "\n" + intentbundleStrings.getStringExtra("brouten")
-                                    + "\n" + intentbundleStrings.getStringExtra("inout"))
+                            .title(intentbundleData.getStringExtra("heads"))
+                            .icon(setIconColour(intentbundleData.getStringExtra("use")))
+                            .snippet("Kletter oder Boulderspot: " + intentbundleData.getStringExtra("use") +
+                                    "\n" + intentbundleData.getStringExtra("krouten") +
+                                    "\n" + intentbundleData.getStringExtra("brouten")
+                                    + "\n" + intentbundleData.getStringExtra("inout"))
                             .position(new LatLng(lat.doubleValue(), longC.doubleValue())));
 
                     CameraPosition position = new CameraPosition.Builder()

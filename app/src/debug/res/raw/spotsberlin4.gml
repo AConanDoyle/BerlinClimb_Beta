@@ -10,7 +10,6 @@
       <gml:coord><gml:X>13.5816013813019</gml:X><gml:Y>52.62448</gml:Y></gml:coord>
     </gml:Box>
   </gml:boundedBy>
-                                                                                                      
   <gml:featureMember>
     <ogr:spotsberlin3 fid="spotsberlin3.0">
       <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.49823,52.62448</gml:coordinates></gml:Point></ogr:geometryProperty>
@@ -554,37 +553,37 @@
       <ogr:BEARBEITER>hagen</ogr:BEARBEITER>
     </ogr:spotsberlin3>
   </gml:featureMember>
-  <gml:featureMember>
-    <ogr:spotsberlin3 fid="spotsberlin3.21">
-      <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.4514820575714,52.479369415248001</gml:coordinates></gml:Point></ogr:geometryProperty>
-      <ogr:ID>43</ogr:ID>
-      <ogr:LAT>52.479369415248001</ogr:LAT>
-      <ogr:LONG>13.451482057571400</ogr:LONG>
-      <ogr:NAME>T-Hall</ogr:NAME>
-      <ogr:STRASSE>Thiemannstraße</ogr:STRASSE>
-      <ogr:HAUSNR>1</ogr:HAUSNR>
-      <ogr:PLZ>12059</ogr:PLZ>
-      <ogr:BEZIRK>Neukölln</ogr:BEZIRK>
-      <ogr:ZUGANG>Thiemannstr. 1, Tor 4, 2. Hof</ogr:ZUGANG>
-      <ogr:ANREISE>Nähe S-Bahn Bahnhof Sonnenalle</ogr:ANREISE>
-      <ogr:EIGNER>T-Hall Kletteranlagen</ogr:EIGNER>
-      <ogr:TELNR>030 680 898 64</ogr:TELNR>
-      <ogr:PREIS>4 bis 12</ogr:PREIS>
-      <ogr:INOUT>indoor</ogr:INOUT>
-      <ogr:NUTZEN>Klettern &amp; Bouldern</ogr:NUTZEN>
-      <ogr:MATERIAL>Holz, Struktur Kunststoff</ogr:MATERIAL>
-      <ogr:GRAD>03-10</ogr:GRAD>
-      <ogr:grade_von>3</ogr:grade_von>
-      <ogr:grade_bis>10.000000000000000</ogr:grade_bis>
-      <ogr:HOEHE>11.000000000000000</ogr:HOEHE>
-      <ogr:KROUTEN>&gt;130</ogr:KROUTEN>
-      <ogr:BROUTEN>viele</ogr:BROUTEN>
-      <ogr:INFO>Sauna und Fitness-Bereich, Caffe-Bar, Sofas zum Entspannen, kleiner Shop, gemütl</ogr:INFO>
-      <ogr:HOMEPAGE>diekletterhalle.de</ogr:HOMEPAGE>
-      <ogr:BEARBEITER>hagen</ogr:BEARBEITER>
-      <ogr:IMAID>t_hall_h</ogr:IMAID>
-    </ogr:spotsberlin3>
-  </gml:featureMember>
+    <gml:featureMember>
+      <ogr:spotsberlin3 fid="spotsberlin3.21">
+        <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.4514820575714,52.479369415248001</gml:coordinates></gml:Point></ogr:geometryProperty>
+        <ogr:ID>43</ogr:ID>
+        <ogr:LAT>52.42811</ogr:LAT>
+        <ogr:LONG>13.36960</ogr:LONG>
+        <ogr:NAME>T-Hall (mitten im Umzug!)</ogr:NAME>
+        <ogr:STRASSE>Trachenbergring</ogr:STRASSE>
+        <ogr:HAUSNR>85</ogr:HAUSNR>
+        <ogr:PLZ>12249</ogr:PLZ>
+        <ogr:BEZIRK>Tempelhof-Schöneberg</ogr:BEZIRK>
+        <ogr:ZUGANG></ogr:ZUGANG>
+        <ogr:ANREISE>Nähe S-Bahn Bahnhof Berlin-Marienfelde</ogr:ANREISE>
+        <ogr:EIGNER>T-Hall Kletteranlagen</ogr:EIGNER>
+        <ogr:TELNR>030 680 898 64</ogr:TELNR>
+        <ogr:PREIS>4 bis 12</ogr:PREIS>
+        <ogr:INOUT>indoor</ogr:INOUT>
+        <ogr:NUTZEN>Klettern &amp; Bouldern</ogr:NUTZEN>
+        <ogr:MATERIAL>Holz, Struktur Kunststoff</ogr:MATERIAL>
+        <ogr:GRAD>03-10</ogr:GRAD>
+        <ogr:grade_von>3</ogr:grade_von>
+        <ogr:grade_bis>10.000000000000000</ogr:grade_bis>
+        <ogr:HOEHE>11.000000000000000</ogr:HOEHE>
+        <ogr:KROUTEN>&gt;130</ogr:KROUTEN>
+        <ogr:BROUTEN>viele</ogr:BROUTEN>
+        <ogr:INFO>Sauna und Fitness-Bereich, Caffe-Bar, Sofas zum Entspannen, kleiner Shop, gemütl</ogr:INFO>
+        <ogr:HOMEPAGE>diekletterhalle.de</ogr:HOMEPAGE>
+        <ogr:BEARBEITER>hagen</ogr:BEARBEITER>
+        <ogr:IMAID>t_hall_h</ogr:IMAID>
+      </ogr:spotsberlin3>
+    </gml:featureMember>
   <gml:featureMember>
     <ogr:spotsberlin3 fid="spotsberlin3.22">
       <ogr:geometryProperty><gml:Point srsName="EPSG:4326"><gml:coordinates>13.524574935436201,52.461487757392298</gml:coordinates></gml:Point></ogr:geometryProperty>

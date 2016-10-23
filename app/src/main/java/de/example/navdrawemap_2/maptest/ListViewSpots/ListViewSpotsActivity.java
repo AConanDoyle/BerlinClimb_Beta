@@ -56,7 +56,6 @@ public class ListViewSpotsActivity extends AppCompatActivity {
     private CustomList customList;
     private ListView listView;
 
-
     Resources resources;
 
     @Override
@@ -125,6 +124,7 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
 
+            /*
             // filter checks for all tree filter variabels;
             if (!filterclimb && parser.getValue(e, KEY_TYPE).equals("Klettern"))
                 continue;
@@ -132,29 +132,30 @@ public class ListViewSpotsActivity extends AppCompatActivity {
                 continue;
             if (!filterboulderandclimb && parser.getValue(e, KEY_TYPE).equals("Klettern & Bouldern"))
                 continue;
+            */
 
             head[i] = parser.getValue(e, KEY_HEAD);
             imageid[i] = getResources().getIdentifier(parser.getValue(e, KEY_IMAGEID),
                     "drawable", getPackageName());
 
             if (parser.getValue(e, KEY_KROUTEN).isEmpty()) {
-                krouten[i] = "Anzahl der Kletterrouten: n.v.";
+                krouten[i] = "n.v.";
             } else {
-                krouten[i] = "Anzahl der Kletterrouten: " + parser.getValue(e, KEY_KROUTEN);
+                krouten[i] = parser.getValue(e, KEY_KROUTEN);
             }
 
             if (parser.getValue(e, KEY_BROUTEN).isEmpty()) {
-                brouten[i] = "Anzahl der Boulderrouten: n.v.";
+                brouten[i] = "n.v.";
             } else {
-                brouten[i] = "Anzahl der Boulderrouten: " + parser.getValue(e, KEY_BROUTEN);
+                brouten[i] = parser.getValue(e, KEY_BROUTEN);
             }
 
             type[i] = parser.getValue(e, KEY_TYPE);
-            inout[i] = "In- oder Outdoor: " + parser.getValue(e, KEY_INOUT);
-            material[i] = "Material: " + parser.getValue(e, KEY_MATERIAL);
-            price[i] = "Preis: " + parser.getValue(e, KEY_PRICE);
+            inout[i] = parser.getValue(e, KEY_INOUT);
+            material[i] = parser.getValue(e, KEY_MATERIAL);
+            price[i] = parser.getValue(e, KEY_PRICE);
 
-            adress[i] = "Adresse: " + parser.getValue(e, KEY_STREET) + " " + parser.getValue(e, KEY_HOUSENR) + ", "
+            adress[i] = parser.getValue(e, KEY_STREET) + " " + parser.getValue(e, KEY_HOUSENR) + ", "
                     + parser.getValue(e, KEY_POSTALCODE) + " " + parser.getValue(e, KEY_DISTRICT);
 
             lat[i] = Double.parseDouble(parser.getValue(e, KEY_LAT));
@@ -175,7 +176,7 @@ public class ListViewSpotsActivity extends AppCompatActivity {
         Arrays.asList(krouten).removeAll(Collections.singleton(""));
         Arrays.asList(brouten).removeAll(Collections.singleton(""));
         Arrays.asList(material).removeAll(Collections.singleton(""));
-        Arrays.asList(price).removeAll(Collections.singleton(""));
+        //    Arrays.asList(price).removeAll(Collections.singleton(""));
         Arrays.asList(adress).removeAll(Collections.singleton(""));
   //      Arrays.asList(Arrays.toString(lat)).removeAll(Collections.singleton(""));
         Arrays.asList(Arrays.toString(longC)).removeAll(Collections.singleton(""));
@@ -227,12 +228,13 @@ public class ListViewSpotsActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
                 Double tvlat = numberlat.doubleValue();
                 Double tvlong = numberlong.doubleValue();
 
                 // String tvlong = textViewlong.getText().toString();
 
-                Intent intentMaps2Activitiy = new Intent(getApplicationContext(),
+                Intent intentSingleSpot = new Intent(getApplicationContext(),
                         Maps_singlespot_Activity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("heads", tvheads);
@@ -242,8 +244,8 @@ public class ListViewSpotsActivity extends AppCompatActivity {
                 bundle.putString("inout", tvinout);
                 bundle.putDouble("lat", tvlat);
                 bundle.putDouble("long", tvlong);
-                intentMaps2Activitiy.putExtras(bundle);
-                startActivity(intentMaps2Activitiy);
+                intentSingleSpot.putExtras(bundle);
+                startActivity(intentSingleSpot);
 
             }
         });
@@ -270,7 +272,6 @@ public class ListViewSpotsActivity extends AppCompatActivity {
 
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(browserIntent);
-
         }
     }
 

@@ -5,7 +5,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="title_activity_overwiev">Spotübersicht</string>
     <string name="large_text">"Kontakt und Impressum"</string>
-    <string name="text_over_main">
+    <string name="text_over_main_1">
         <![CDATA[
         <br/>
 Angaben
@@ -14,10 +14,16 @@ gem&auml;&szlig; &sect; 5 TMG<br/>
 Anonymous
 <br/>
 <br/>
-Kontakt:<br/>
-E-Mail:
-mapapps@posteo.de<br/>
+Kontakt:
 <br/>
+    ]]></string>
+    <string name="text_over_main_contact_mail">
+        <![CDATA[
+        E-Mail: <i>mapapps@posteo.de</i>
+    ]]></string>
+
+    <string name="text_over_main_2">
+        <![CDATA[
 <br/>
 <b>Haftung f&uuml;r Inhalte</b><br/>
 <br/>
@@ -61,7 +67,6 @@ k&ouml;nnen, erkl&auml;ren die Herausgeber hiermit, dass alle Angaben
 im Sinne der Produkthaftung ohne Garantie erfolgen und keine Haftung
 f&uuml;r jedwede Angaben &uuml;bernommen werden kann.<br/>
 
-
 ]]></string>
     <string name="made_text_start">"Made with"</string>
     <string name="made_text_end"> in Berlin!</string>
@@ -72,8 +77,16 @@ f&uuml;r jedwede Angaben &uuml;bernommen werden kann.<br/>
     <string name="sort_">Platzhalter!</string>
     <string name="routing">Route</string>
     <string name="title_activity_maps12">Map</string>
-    <string name="accessToken">sk.eyJ1IjoiYW5kcm9pZHBpdGkiLCJhIjoiY2lxeHZuejV2MDA0cWk0bmp3azV5NzhleCJ9.dfzuFWtXNvaYdJC88gh1cw</string>
+    <string name="accessToken" translatable="false">sk.eyJ1IjoiYW5kcm9pZHBpdGkiLCJhIjoiY2lxeHZuejV2MDA0cWk0bmp3azV5NzhleCJ9.dfzuFWtXNvaYdJC88gh1cw</string>
     <string name="bikeroute">Fahradroute</string>
     <string name="walkroute">zu Fuß</string>
+    <string name="typ">Art: </string>
+    <string name="inoutdoor">In- oder Outdoor: </string>
+    <string name="brouten">Anzahl der Boulderrouten: </string>
+    <string name="krouten">"Anzahl der Kletterrouten: </string>
+    <string name="material">Material: </string>
+    <string name="price">Preis: </string>
+    <string name="adress">Adresse: </string>
+    <string name="web">Web: </string>
 
 </resources>
