@@ -6,6 +6,6 @@ This project is still in developement phase. So please feel free to comment and 
 
 License: GPLv3
 
-
-![BerlinClimb_Beta_1](https://github.com/AConanDoyle/BerlinClimb_Beta/blob/master/device-2016-06-17-200855.png?raw=true "MapView") ![BerlinClimb_Beta_2](https://github.com/AConanDoyle/BerlinClimb_Beta/blob/master/device-2016-06-17-200941.png?raw=true "ListView")
+![BerlinClimb_Beta_1](https://github.com/AConanDoyle/BerlinClimb_Beta/blob/ClimbBerlin_2/screenshots/mapview.png?raw=true "MapView") 
+![BerlinClimb_Beta_2](https://github.com/AConanDoyle/BerlinClimb_Beta/blob/ClimbBerlin_2/screenshots/mapview_filter.png?raw=true "ListView")
 
