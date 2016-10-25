@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "Professor Moriarty 1.0"
+        versionName "Professor Moriarty 0.8"
     }
     buildTypes {
         release {
