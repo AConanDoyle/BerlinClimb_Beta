@@ -184,6 +184,7 @@ public class ListViewSpotsActivity extends AppCompatActivity {
 
         customList = new CustomList(this, head, imageid, type, inout, krouten, brouten,
                 material, price, adress, lat, longC, webadress);
+
         listView = (ListView) findViewById(R.id.listView);
        // cardview = (CardView) findViewById(R.id.card_view);
         listView.setAdapter(customList);

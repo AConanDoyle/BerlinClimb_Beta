@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.example.navdrawemap_2.maptest">
 
-    <!-- Google Maps and MapBox permissions -->
+    <!-- MapBox permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -18,6 +18,7 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme">
 
+        <!-- permissions for MapBox Routing -->
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
         <activity
@@ -39,7 +40,6 @@
             android:name=".ListViewSpots.ListViewSpotsActivity"
             android:label="@string/title_activity_overwiev"
             android:parentActivityName=".Maps.MapsActivity"
-            android:largeHeap="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".OverActivity"

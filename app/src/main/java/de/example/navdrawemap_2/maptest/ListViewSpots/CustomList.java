@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.NumberFormat;
 
 import de.example.navdrawemap_2.maptest.R;
@@ -43,44 +45,47 @@ public class CustomList extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-            LayoutInflater inflater = context.getLayoutInflater();
-            View listViewItem = inflater.inflate(R.layout.content_overwiev, null, true);
-            TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewHeads);
-            ImageView imageView = (ImageView) listViewItem.findViewById(R.id.imageView);
-            TextView textViewType = (TextView) listViewItem.findViewById(R.id.textViewType);
-            TextView textViewInOut = (TextView) listViewItem.findViewById(R.id.textViewInOUT);
-            TextView textViewKRouten = (TextView) listViewItem.findViewById(R.id.textViewKRouten);
-            TextView textViewBRouten = (TextView) listViewItem.findViewById(R.id.textViewBRouten);
-            TextView textViewMaterial = (TextView) listViewItem.findViewById(R.id.textViewMaterial);
-            TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewPrice);
-            TextView textViewAdress = (TextView) listViewItem.findViewById(R.id.textViewAdress);
-            TextView textViewLat = (TextView) listViewItem.findViewById(R.id.textViewLat);
-            TextView textViewLong = (TextView) listViewItem.findViewById(R.id.textViewLong);
-            TextView textViewWebadress = (TextView) listViewItem.findViewById(R.id.textViewWebadress);
+        LayoutInflater inflater = context.getLayoutInflater();
+        View listViewItem = inflater.inflate(R.layout.content_overwiev, null, true);
+        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewHeads);
+        ImageView imageView = (ImageView) listViewItem.findViewById(R.id.imageView);
+        TextView textViewType = (TextView) listViewItem.findViewById(R.id.textViewType);
+        TextView textViewInOut = (TextView) listViewItem.findViewById(R.id.textViewInOUT);
+        TextView textViewKRouten = (TextView) listViewItem.findViewById(R.id.textViewKRouten);
+        TextView textViewBRouten = (TextView) listViewItem.findViewById(R.id.textViewBRouten);
+        TextView textViewMaterial = (TextView) listViewItem.findViewById(R.id.textViewMaterial);
+        TextView textViewPrice = (TextView) listViewItem.findViewById(R.id.textViewPrice);
+        TextView textViewAdress = (TextView) listViewItem.findViewById(R.id.textViewAdress);
+        TextView textViewLat = (TextView) listViewItem.findViewById(R.id.textViewLat);
+        TextView textViewLong = (TextView) listViewItem.findViewById(R.id.textViewLong);
+        TextView textViewWebadress = (TextView) listViewItem.findViewById(R.id.textViewWebadress);
 
-            NumberFormat nm = NumberFormat.getNumberInstance();
+        NumberFormat nm = NumberFormat.getNumberInstance();
 
-            // Sets the image or a default image
-            if (imageid[position] != 0) {
-                imageView.setImageResource(imageid[position]);
-            } else {
-                imageView.setImageResource(R.mipmap.ic_launcher);
-            }
-            // set the values in the text
-            textViewName.setText(heads[position]);
+        // execute() insert call
+        // Sets the image for a spot or a default image
+        if (imageid[position] != 0) {
+            Picasso.with(context).load(imageid[position]).into(imageView);
+            // imageView.setImageResource(imageid[position]);
+        } else {
+            Picasso.with(context).load(R.mipmap.ic_launcher).into(imageView);
+            // imageView.setImageResource(R.mipmap.ic_launcher);
+        }
 
-            textViewType.setText(type[position]);
-            textViewInOut.setText(inout[position]);
-            textViewKRouten.setText(krouten[position]);
-            textViewBRouten.setText(brouten[position]);
-            textViewMaterial.setText(material[position]);
-            textViewPrice.setText(price[position]);
-            textViewAdress.setText(adress[position]);
-            textViewLat.setText(nm.format(lat[position]));
-            textViewLong.setText(nm.format(longC[position]));
-            textViewWebadress.setText(webadress[position]);
+        // set the values in the text
+        textViewName.setText(heads[position]);
+        textViewType.setText(type[position]);
+        textViewInOut.setText(inout[position]);
+        textViewKRouten.setText(krouten[position]);
+        textViewBRouten.setText(brouten[position]);
+        textViewMaterial.setText(material[position]);
+        textViewPrice.setText(price[position]);
+        textViewAdress.setText(adress[position]);
+        textViewLat.setText(nm.format(lat[position]));
+        textViewLong.setText(nm.format(longC[position]));
+        textViewWebadress.setText(webadress[position]);
 
-            return listViewItem;
+        return listViewItem;
     }
 
     // returns the listview Item by position

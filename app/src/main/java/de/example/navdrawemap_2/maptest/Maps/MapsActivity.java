@@ -32,11 +32,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.commons.turf.TurfConstants;
-import com.mapbox.services.commons.turf.TurfException;
-import com.mapbox.services.commons.turf.TurfMeasurement;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -83,6 +78,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapView = (MapView) findViewById(R.id.mapviewmapbox);
 
@@ -446,28 +442,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             default:
                 return icon = iconFactory.fromDrawable(iconDrawableDeppRed);
         }
-    }
-
-    // first draw
-    // calculating distance between user-location and selected marker
-    public void distance(LatLng markerPosition) {
-
-        Position myposition_local = null;
-        Position marker = null;
-        // problem: getting lat long from parameters
-        marker.fromCoordinates(markerPosition.getLongitude(),markerPosition.getLatitude());
-        myposition_local.fromCoordinates(myposition.getLatitude(), myposition.getLatitude());
-
-        double distance = 0;
-
-        try {
-            distance = TurfMeasurement.distance(Point.fromCoordinates(myposition_local), Point.fromCoordinates(marker),
-                    TurfConstants.UNIT_KILOMETERS);
-        } catch (TurfException e) {
-            e.printStackTrace();
-        }
-        Snackbar.make(findViewById(android.R.id.content), "Entfernung = " + distance + " Kilometer",
-                Snackbar.LENGTH_INDEFINITE).show();
     }
 
     // lifecycle methods

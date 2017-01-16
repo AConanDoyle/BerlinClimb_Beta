@@ -1,13 +1,14 @@
 package de.example.navdrawemap_2.maptest.Maps;
 
-
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -25,10 +26,13 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
     private MapView mapView;
     private MapboxMap mapboxMap;
     private Maps_singlespot_Activity context;
+    private static final String TAG = "Maps_singlespot_Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MapboxAccountManager.start(this, getString(R.string.accessToken));
+
         setContentView(R.layout.activity_maps_singlespot);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -37,7 +41,6 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
 
         context = this;
         onMapReady(mapboxMap);
-
     }
 
     @Override
@@ -72,9 +75,9 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
                             .title(intentbundleData.getStringExtra("heads"))
                             .icon(setIconColour(intentbundleData.getStringExtra("use")))
                             .snippet("Kletter oder Boulderspot: " + intentbundleData.getStringExtra("use") +
-                                    "\n" + intentbundleData.getStringExtra("krouten") +
-                                    "\n" + intentbundleData.getStringExtra("brouten")
-                                    + "\n" + intentbundleData.getStringExtra("inout"))
+                                    "\nKletterrouten: " + intentbundleData.getStringExtra("krouten") +
+                                    "\nBoulderrouten: " + intentbundleData.getStringExtra("brouten")
+                                    + "\nIn- oder Outdoor: " + intentbundleData.getStringExtra("inout"))
                             .position(new LatLng(lat.doubleValue(), longC.doubleValue())));
 
                     CameraPosition position = new CameraPosition.Builder()
@@ -86,6 +89,8 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
                             .newCameraPosition(position), 6000);
                 }
             });
+        } else {
+            Log.e(TAG, "Maps_singlespot_Activity.onMapReady() — Empty intent.");
         }
     }
 
@@ -109,4 +114,33 @@ public class Maps_singlespot_Activity extends AppCompatActivity implements OnMap
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
 }

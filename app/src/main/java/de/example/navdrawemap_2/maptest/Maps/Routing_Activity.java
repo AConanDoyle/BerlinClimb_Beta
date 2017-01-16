@@ -27,7 +27,11 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.turf.TurfConstants;
+import com.mapbox.services.commons.turf.TurfException;
+import com.mapbox.services.commons.turf.TurfMeasurement;
 import com.mapbox.services.directions.v4.models.Waypoint;
 import com.mapbox.services.directions.v5.DirectionsCriteria;
 import com.mapbox.services.directions.v5.MapboxDirections;
@@ -91,7 +95,6 @@ public class Routing_Activity extends AppCompatActivity {
                 }
             }
         }
-
 
         // Add start and destination to the map
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -158,7 +161,7 @@ public class Routing_Activity extends AppCompatActivity {
                 if (intentbundleData.getStringExtra("routingprofile").equals("PROFILE_CYCLING")) {
                     routingProfile = DirectionsCriteria.PROFILE_CYCLING;
                 } else {
-                    routingProfile = DirectionsCriteria.PROFILE_CYCLING;
+                    routingProfile = DirectionsCriteria.PROFILE_WALKING;
                 }
 
                 // get route
@@ -286,8 +289,30 @@ public class Routing_Activity extends AppCompatActivity {
 
     }
 
+    // first draw
+    // calculating distance between user-location and selected marker
+    public void distance(LatLng markerPosition) {
+
+        Position myposition_local = null;
+        Position marker = null;
+        // problem: getting lat long from parameters
+        marker.fromCoordinates(markerPosition.getLongitude(), markerPosition.getLatitude());
+        myposition_local.fromCoordinates(myposition.getLatitude(), myposition.getLatitude());
+
+        double distance = 0;
+
+        try {
+            distance = TurfMeasurement.distance(Point.fromCoordinates(myposition_local), Point.fromCoordinates(marker),
+                    TurfConstants.UNIT_KILOMETERS);
+        } catch (TurfException e) {
+            e.printStackTrace();
+        }
+        Snackbar.make(findViewById(android.R.id.content), "Entfernung = " + distance + " Kilometer",
+                Snackbar.LENGTH_INDEFINITE).show();
+    }
+
     private LocationListener locationListener = new LocationListener() {
-        public String TAG;
+        public String TAG = "locationListener works";
 
         @Override
         public void onLocationChanged(Location location) {
